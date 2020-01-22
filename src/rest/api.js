@@ -3,8 +3,8 @@ import {Message} from 'element-ui'
 
 import router from "../router"
 
-const baseUrl = 'http://127.0.0.1:80';
-// const baseUrl = 'http://qa.zaihui.com.cn';
+// const baseUrl = 'http://127.0.0.1:80';
+const baseUrl = 'http://video.fangzhou.weishi100.com:80';
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = baseUrl;
