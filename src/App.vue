@@ -71,10 +71,25 @@
               <el-input :value="sub.episode_name"/>
             </el-col>
             <el-col :span="8">
-              <el-button type="text" v-clipboard:copy="sub.episode_name">复制</el-button>
+              <el-button
+                  type="text"
+                  v-clipboard:copy="sub.episode_name"
+                  v-clipboard:error="onError"
+                  v-clipboard:success="onCopy">复制
+              </el-button>
             </el-col>
           </el-row>
         </el-row>
+        <div class="block" v-if="resultCount">
+          <span class="demonstration"></span>
+          <el-pagination
+              :current-page.sync="page"
+              :page-size="pageSize"
+              :total="resultCount"
+              @current-change="handleCurrentChange"
+              layout="prev, pager, next, jumper">
+          </el-pagination>
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -90,19 +105,19 @@ export default {
       searchResult: [],
       resultCount: 0,
       page: 1,
-      page_size: 10,
+      pageSize: 10,
     };
   },
   methods: {
     handleCheck() {
       this.isLoading = true;
-      let params = {'search_keywords': this.searchKeyWord, 'page': this.page, 'page_size': this.page_size};
+      let params = {'search_keywords': this.searchKeyWord, 'page': 1, 'page_size': this.pageSize};
       this.$api.searchVideo(params)
         .then(({data}) => {
           // eslint-disable-next-line no-console
           console.log(data);
           this.searchResult = data.results;
-          this.resultCount = data.count
+          this.resultCount = data.count;
         })
         .finally(() => {
           this.isLoading = false;
@@ -113,6 +128,29 @@ export default {
       // window.location.href = urls;
       // 新窗口下载
       window.open(urls, '_blank');
+    },
+    handleCurrentChange(val) {
+      // eslint-disable-next-line no-console
+      console.log(`当前页: ${val}`);
+      let params = {'search_keywords': this.searchKeyWord, 'page': val, 'page_size': this.pageSize};
+      this.$api.searchVideo(params)
+        .then(({data}) => {
+          this.searchResult = data.results;
+        })
+    },
+    onCopy: function () {
+      this.$message({
+        message: '复制成功',
+        type: 'success',
+        duration: 500
+      });
+    },
+    onError: function () {
+      this.$message({
+        message: '复制失败',
+        type: 'error',
+        duration: 500
+      });
     },
   }
 }
