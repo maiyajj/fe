@@ -27,7 +27,7 @@
         <el-row :key="sub.subtile_sn" style="margin-bottom: 40px;" v-for="(sub, index) in searchResult">
           <el-row :gutter="20" align="top" style="margin-bottom: 10px;" type="flex">
             <el-col :span="3">
-              <div>视频片段{{ index+1 }}</div>
+              <div>视频片段{{ (page - 1) * 10 + index + 1 }}</div>
             </el-col>
             <el-col :span="8">
               <video :src="sub.video_url" controls height="180" width="320"/>
@@ -38,7 +38,7 @@
           </el-row>
           <el-row :gutter="20" align="middle" style="margin-bottom: 10px;" type="flex">
             <el-col :span="3">
-              <div>音频片段{{ index+1 }}</div>
+              <div>音频片段{{ (page - 1) * 10 + index + 1 }}</div>
             </el-col>
             <el-col :span="8">
               <audio :src="sub.audio_url" controls="controls"/>
@@ -49,7 +49,7 @@
           </el-row>
           <el-row :gutter="20" align="middle" style="margin-bottom: 10px;" type="flex">
             <el-col :span="3">
-              <div>中文字幕{{ index+1 }}</div>
+              <div>中文字幕{{ (page - 1) * 10 + index + 1 }}</div>
             </el-col>
             <el-col :span="8">
               <el-input :value="sub.subtile" autosize type="textarea"/>
@@ -65,7 +65,7 @@
           </el-row>
           <el-row :gutter="20" align="middle" type="flex">
             <el-col :span="3">
-              <div>来源{{ index+1 }}</div>
+              <div>来源{{ (page - 1) * 10 + index + 1 }}</div>
             </el-col>
             <el-col :span="8">
               <el-input :value="sub.episode_name" autosize type="textarea"/>
@@ -124,20 +124,21 @@ export default {
     },
     handleClick(urls) {
       // 本窗口下载
-      // window.location.href = urls;
+      window.location.href = urls;
       // 新窗口下载
-      window.open(urls, '_blank');
+      // window.open(urls, '_blank');
     },
     handleCurrentChange(val) {
       // eslint-disable-next-line no-console
       console.log(`当前页: ${val}`);
+      this.page = val;
       const loading = this.$loading({
         lock: true,
         text: 'Loading',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      let params = {'search_keywords': this.searchKeyWord, 'page': val, 'page_size': this.pageSize};
+      let params = {'search_keywords': this.searchKeyWord, 'page': this.page, 'page_size': this.pageSize};
       this.$api.searchVideo(params)
         .then(({data}) => {
           this.searchResult = data.results;
