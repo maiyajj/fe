@@ -1,29 +1,26 @@
-# adward-fe
+# 部署
+后端域名：https://fangzhou.weishi100.com/video
 
-## Project setup
-```
+静态资源路径：root/project/dist/video/dist
+
+工程Git clone目录project
+
+```shell script
+cd root/project
+# 安装vue cli3.0
+sudo cnpm install -g @vue/cli-service
+# clone项目工程
+git clone https://username:password@github.....git
+# 安装依赖包
+cd adward-fe
 yarn install
+# 部署
+yarn build
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+# 维护
+api：api.js
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+路由：index.js
 
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+首页：App.vue
