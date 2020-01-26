@@ -25,18 +25,18 @@
           </el-col>
         </el-row>
         <el-row :key="sub.subtile_sn" style="margin-bottom: 40px;" v-for="(sub, index) in searchResult">
-          <el-row :gutter="20">
+          <el-row :gutter="20" align="top" style="margin-bottom: 10px;" type="flex">
             <el-col :span="3">
               <div>视频片段{{ index+1 }}</div>
             </el-col>
             <el-col :span="8">
-              <video :src="sub.video_url" controls="controls" height="240" width="320"/>
+              <video :src="sub.video_url" controls height="180" width="320"/>
             </el-col>
             <el-col :span="8">
               <el-button @click="handleClick(sub.video_url)" type="text">下载</el-button>
             </el-col>
           </el-row>
-          <el-row :gutter="20">
+          <el-row :gutter="20" align="middle" style="margin-bottom: 10px;" type="flex">
             <el-col :span="3">
               <div>音频片段{{ index+1 }}</div>
             </el-col>
@@ -47,12 +47,12 @@
               <el-button @click="handleClick(sub.audio_url)" type="text">下载</el-button>
             </el-col>
           </el-row>
-          <el-row :gutter="20">
+          <el-row :gutter="20" align="middle" style="margin-bottom: 10px;" type="flex">
             <el-col :span="3">
               <div>中文字幕{{ index+1 }}</div>
             </el-col>
             <el-col :span="8">
-              <el-input :value="sub.subtile"/>
+              <el-input :value="sub.subtile" autosize type="textarea"/>
             </el-col>
             <el-col :span="8">
               <el-button
@@ -63,12 +63,12 @@
               </el-button>
             </el-col>
           </el-row>
-          <el-row :gutter="20">
+          <el-row :gutter="20" align="middle" type="flex">
             <el-col :span="3">
               <div>来源{{ index+1 }}</div>
             </el-col>
             <el-col :span="8">
-              <el-input :value="sub.episode_name"/>
+              <el-input :value="sub.episode_name" autosize type="textarea"/>
             </el-col>
             <el-col :span="8">
               <el-button
@@ -81,7 +81,6 @@
           </el-row>
         </el-row>
         <div class="block" v-if="resultCount">
-          <span class="demonstration"></span>
           <el-pagination
               :current-page.sync="page"
               :page-size="pageSize"
