@@ -3,20 +3,58 @@
     <el-container>
       <el-main>
         <div style="font-size: 30px; margin-bottom: 50px;">影视素材检索</div>
-        <div style="display: flex; align-items: center; margin-bottom: 30px;">
-          <div style="margin-right: 20px;">关键词</div>
-          <el-input
-              placeholder="请输入内容"
-              style="width: 500px; margin-right: 30px;"
-              v-model="searchKeyWord"/>
-          <el-button
-              :loading="isLoading"
-              @click="handleCheck"
-              round
-              type="primary">搜索
-          </el-button>
-        </div>
-        <el-row style="margin-bottom: 30px;">
+        <el-row align="middle" style="margin-bottom: 10px;" type="flex">
+          <el-col :span="2">
+            <div>关键词</div>
+          </el-col>
+          <el-col :span="9">
+            <el-input
+                placeholder="请输入内容"
+                style="margin-right: 30px;"
+                v-model="searchKeyWord"/>
+          </el-col>
+          <el-col :span="13">
+            <div></div>
+          </el-col>
+        </el-row>
+        <el-row align="middle" style="margin-bottom: 10px;" type="flex">
+          <el-col :span="2">
+            <div>来源名</div>
+          </el-col>
+          <el-col :span="9">
+            <el-input
+                placeholder="请输入内容"
+                style="margin-right: 30px;"
+                v-model="searchKeyName"/>
+          </el-col>
+          <el-col :span="13">
+            <div></div>
+          </el-col>
+        </el-row>
+        <el-row align="middle" style="margin-bottom: 10px;" type="flex">
+          <el-col :span="2">
+            <div></div>
+          </el-col>
+          <el-col :span="9">
+            <div style="display: flex; justify-content:space-between;">
+              <el-button
+                  @click="handleClear"
+                  style="width: 150px"
+                  type="primary">重置
+              </el-button>
+              <el-button
+                  :loading="isLoading"
+                  @click="handleCheck"
+                  style="width: 150px"
+                  type="primary">搜索
+              </el-button>
+            </div>
+          </el-col>
+          <el-col :span="13">
+            <div></div>
+          </el-col>
+        </el-row>
+        <el-row style="margin-bottom: 30px; margin-top: 30px;">
           <el-col :span="3">
             <div style="margin-right: 30px">素材信息</div>
           </el-col>
@@ -100,6 +138,7 @@ export default {
   data() {
     return {
       searchKeyWord: "",
+      searchKeyName: "",
       isLoading: false,
       searchResult: [],
       resultCount: 0,
@@ -108,9 +147,18 @@ export default {
     };
   },
   methods: {
+    handleClear() {
+      this.searchKeyWord = "";
+      this.searchKeyName = "";
+    },
     handleCheck() {
       this.isLoading = true;
-      let params = {'search_keywords': this.searchKeyWord, 'page': 1, 'page_size': this.pageSize};
+      let params = {
+        'search_keywords': this.searchKeyWord,
+        'source_name': this.searchKeyName,
+        'page': 1,
+        'page_size': this.pageSize
+      };
       this.$api.searchVideo(params)
         .then(({data}) => {
           // eslint-disable-next-line no-console
@@ -137,7 +185,12 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
-      let params = {'search_keywords': this.searchKeyWord, 'page': val, 'page_size': this.pageSize};
+      let params = {
+        'search_keywords': this.searchKeyWord,
+        'source_name': this.searchKeyName,
+        'page': val,
+        'page_size': this.pageSize
+      };
       this.$api.searchVideo(params)
         .then(({data}) => {
           this.searchResult = data.results;
