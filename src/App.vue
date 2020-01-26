@@ -131,10 +131,19 @@ export default {
     handleCurrentChange(val) {
       // eslint-disable-next-line no-console
       console.log(`当前页: ${val}`);
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
       let params = {'search_keywords': this.searchKeyWord, 'page': val, 'page_size': this.pageSize};
       this.$api.searchVideo(params)
         .then(({data}) => {
           this.searchResult = data.results;
+        })
+        .finally(() => {
+          loading.close();
         })
     },
     onCopy: function () {
