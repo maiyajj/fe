@@ -4,7 +4,7 @@ import {Message} from 'element-ui'
 import router from "../router"
 
 // const baseUrl = 'http://127.0.0.1:5000';
-const baseUrl = 'http://video.fangzhou.weishi100.com:80';
+const baseUrl = 'https://fangzhou.weishi100.com/video';
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = baseUrl;
