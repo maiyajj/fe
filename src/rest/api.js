@@ -23,7 +23,7 @@ axios.interceptors.request.use(function (config) {
 });
 
 axios.interceptors.response.use(function (response) {
-  let code = response.data.code;
+  let code = response.status;
   let message = response.data.message;
   if (code === 200) {
     return response
@@ -51,5 +51,5 @@ axios.interceptors.response.use(function (response) {
 
 
 export const searchVideo = params => {
-  return axios.get('/query/', {params: params}).then(res => res.data)
+  return axios.get('/query/', {params: params})
 };
