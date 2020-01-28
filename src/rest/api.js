@@ -28,7 +28,7 @@ axios.interceptors.response.use(function (response) {
   if (code === 200) {
     return response
   } else if (code === 400) {
-    Message.warning(JSON.stringify(message));
+    Message.warning(message);
     return Promise.reject(message);
   } else if (code === 401) {
     router.replace({
@@ -41,7 +41,7 @@ axios.interceptors.response.use(function (response) {
   let status = error.response.status;
   let message = error.response.data.message;
   if (status === 400) {
-    Message.warning(JSON.stringify(message));
+    Message.warning(message);
     return Promise.reject(message);
   } else {
     Message.error('服务器内部错误');
