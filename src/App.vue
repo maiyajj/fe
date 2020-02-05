@@ -133,6 +133,9 @@
 </template>
 
 <script>
+// eslint-disable-next-line no-unused-vars
+import download from 'downloadjs';
+
 export default {
   name: 'app',
   data() {
@@ -172,9 +175,12 @@ export default {
     },
     handleClick(urls) {
       // 本窗口下载
-      window.location.href = urls;
+      // window.location.href = urls;
+      // eslint-disable-next-line no-console
+      console.log(urls);
+      // download(x.responseURL);
       // 新窗口下载
-      // window.open(urls, '_blank');
+      window.open(urls, '_blank');
     },
     handleCurrentChange(val) {
       // eslint-disable-next-line no-console
