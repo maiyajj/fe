@@ -213,6 +213,7 @@ export default {
         })
         .finally(() => {
           loading.close();
+          window.scrollTo(0, 0);
         })
     },
     onCopy: function () {
