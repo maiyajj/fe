@@ -141,8 +141,7 @@
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
-import download from 'downloadjs';
+import fileDownload from 'js-file-download'
 
 export default {
   name: 'app',
@@ -182,13 +181,24 @@ export default {
         })
     },
     handleClick(urls) {
-      // 本窗口下载
-      // window.location.href = urls;
       // eslint-disable-next-line no-console
       console.log(urls);
-      // download(x.responseURL);
-      // 新窗口下载
-      window.open(urls, '_blank');
+      this.$message({
+        message: '已开始下载，请稍后',
+        type: 'success',
+        duration: 3000
+      });
+      const param = {"url": urls};
+      // 前端传入url，后端下载完成后再返回文件数据流，接口时间较长。
+      this.$api.downloadFiles(param)
+        .then(({data}) => {
+          const urlList = urls.split("/");
+          const fileName = urlList[urlList.length - 1];
+          fileDownload(data, fileName)
+        })
+        .catch(() => {
+          this.$message.error('下载失败');
+        });
     },
     handleCurrentChange(val) {
       // eslint-disable-next-line no-console

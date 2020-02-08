@@ -53,3 +53,7 @@ axios.interceptors.response.use(function (response) {
 export const searchVideo = params => {
   return axios.get('/query/', {params: params})
 };
+
+export const downloadFiles = params => {
+  return axios.post('/anonymous/download/', params, {responseType: 'blob'});
+};
