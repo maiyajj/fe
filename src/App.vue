@@ -101,6 +101,14 @@
               </el-button>
             </el-col>
           </el-row>
+          <el-row :gutter="20" align="middle" style="margin-bottom: 10px;" type="flex">
+            <el-col :span="3">
+              <div>时间段{{ (page - 1) * 10 + index + 1 }}</div>
+            </el-col>
+            <el-col :span="8">
+              <el-input :value="sub.begin_at + ' - ' + sub.end_at" autosize type="textarea"/>
+            </el-col>
+          </el-row>
           <el-row :gutter="20" align="middle" type="flex">
             <el-col :span="3">
               <div>来源{{ (page - 1) * 10 + index + 1 }}</div>
