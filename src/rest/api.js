@@ -3,8 +3,8 @@ import {Message} from 'element-ui'
 
 import router from "../router"
 
-// const baseUrl = 'http://127.0.0.1:5000';
-const baseUrl = 'https://fangzhou.weishi100.com/video';
+const baseUrl = 'http://127.0.0.1:5000';
+// const baseUrl = 'https://fangzhou.weishi100.com/video';
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = baseUrl;
@@ -56,4 +56,16 @@ export const getVideo = params => {
 
 export const downloadFiles = params => {
   return axios.post('/anonymous/download/', params, {responseType: 'blob'});
+};
+
+export const getWordTheatre = params => {
+  return axios.get('/products/', {params: params})
+};
+
+export const updateWordTheatre = params => {
+  return axios.put('/products/', params)
+};
+
+export const getPreviewVideo = params => {
+  return axios.get('/products/preview/', {params: params})
 };

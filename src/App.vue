@@ -2,10 +2,16 @@
   <div>
     <el-container>
       <el-main>
-        <span :class="[activeName === 'first'? 'active-navi-tabs' : 'navi-tabs']"
-              @click="handleClick('first')">影视素材检索</span>
-        <span :class="[activeName === 'second'? 'active-navi-tabs' : 'navi-tabs']"
-              @click="handleClick('second')">单词剧场视频</span>
+        <span
+            :class="[activeName === 'first'? 'active-navi-tabs' : 'navi-tabs']"
+            @click="handleClick('first')">
+          影视素材检索
+        </span>
+        <span
+            :class="[activeName === 'second'? 'active-navi-tabs' : 'navi-tabs']"
+            @click="handleClick('second')">
+          单词剧场视频
+        </span>
         <MoveSearch v-if="activeName === 'first'"/>
         <WordTheatre v-else/>
       </el-main>
@@ -14,8 +20,8 @@
 </template>
 
 <script>
-import MoveSearch from "@/components/MovieSearch";
-import WordTheatre from "@/components/WordTheatre";
+import MoveSearch from "@/pages/MovieSearch";
+import WordTheatre from "@/pages/WordTheatre";
 
 export default {
   name: 'app',
