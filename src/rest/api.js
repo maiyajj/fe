@@ -50,7 +50,7 @@ axios.interceptors.response.use(function (response) {
 });
 
 
-export const searchVideo = params => {
+export const getVideo = params => {
   return axios.get('/query/', {params: params})
 };
 
