@@ -105,7 +105,12 @@
           v-if="unselectedVideo.count">
       </el-pagination>
     </div>
-    <EditVideo :pageJump="pageJump" :waitEditVideo="selectedVideo" v-else-if="dataPageJump.toPage === 'editVideo'"/>
+    <EditVideo
+      v-else-if="dataPageJump.toPage === 'editVideo'"
+      :pageJump="pageJump"
+      :waitEditVideo="selectedVideo"
+      @navToLastStep="handleCreateVideo"
+    />
   </div>
 </template>
 
@@ -274,7 +279,12 @@ export default {
           this.unselectedVideo.page = val;
           window.scrollTo(0, 0);
         })
-    }
+    },
+    handleCreateVideo() {
+      // eslint-disable-next-line no-console
+      console.log('ediddd')
+      this.dataPageJump.toPage = 'createVideo'
+    },
   },
   mounted() {
     this.dataPageJump.toPage = this.pageJump.toPage

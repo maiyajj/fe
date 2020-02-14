@@ -258,13 +258,16 @@ export default {
       console.log(this.waitEditVideo.data);
     },
     handleLastStep() {
-      if (this.pageJump.beforePage === 'createVideo') {
-        this.pageJump.toPage = 'createVideo';
-        this.pageJump.beforePage = 'editVideo';
-      } else {
-        this.pageJump.toPage = 'wordTheatre';
-        this.pageJump.beforePage = 'editVideo';
-      }
+      // if (this.pageJump.beforePage === 'createVideo') {
+      //   this.pageJump.toPage = 'createVideo';
+      //   this.pageJump.beforePage = 'editVideo';
+      // } else {
+      //   this.pageJump.toPage = 'wordTheatre';
+      //   this.pageJump.beforePage = 'editVideo';
+      // }
+      // eslint-disable-next-line no-console
+      console.log('nav to')
+      this.$emit('navToLastStep')
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
