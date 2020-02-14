@@ -102,7 +102,53 @@ export default {
       searchWordTheatre: {
         loading: false,
         keyword: '',
-        data: [],
+        data: [{
+            "uid": "91c6921cfca442d392dd915403b35371",
+            "video_url": "https://fangzhou-video.oss-cn-beijing.aliyuncs.com/oss:/extend/apps/split/apps/download/documentary/了不起的麦瑟尔夫人/了不起的麦瑟尔夫人-S2-04-1857.mp4",
+            "created_at": "2020-02-09T14:30:30.219791",
+            "word": {
+                "spelling": "handsome",  // 拼写
+                "phonetic_symbol": "[`hensem]",  // 音标
+                "paraphrase": "英俊的；漂亮的",  // 释义
+            },
+            "segments": [{
+                "subtile": "He's handsome",
+                "episode_name": "了不起的麦瑟尔夫人-S2-04-1857",
+                "begin_at": "00:36:49,120",
+                "end_at": "00:36:50,120",
+                "video_url": "https://fangzhou-video.oss-cn-beijing.aliyuncs.com/oss:/extend/apps/split/apps/download/documentary/了不起的麦瑟尔夫人/了不起的麦瑟尔夫人-S2-04-1857.mp4",
+                "episode": 1736,
+                "subtile_sn": 1857,
+                "audio_url": "https://fangzhou-video.oss-cn-beijing.aliyuncs.com/oss:/extend/apps/split/apps/download/documentary/了不起的麦瑟尔夫人/了不起的麦瑟尔夫人-S2-04-1857.mp3"
+            }],  // 视频片段
+            "ending_duration": 1,  // 片尾市长
+            "remix_times": 3,  // 单词循环次数
+            "rerun_times": 2,  // 循环次数
+            "word_display_duration": 1.5,  // 单词释义时长
+        }, {
+            "uid": "91c6921cfca442d392dd915403b35371",
+            "video_url": "https://fangzhou-video.oss-cn-beijing.aliyuncs.com/oss:/extend/apps/split/apps/download/documentary/了不起的麦瑟尔夫人/了不起的麦瑟尔夫人-S2-04-1857.mp4",
+            "created_at": "2020-02-09T14:30:30.219791",
+            "word": {
+                "spelling": "handsome",  // 拼写
+                "phonetic_symbol": "[`hensem]",  // 音标
+                "paraphrase": "英俊的；漂亮的",  // 释义
+            },
+            "segments": [{
+                "subtile": "He's handsome",
+                "episode_name": "了不起的麦瑟尔夫人-S2-04-1857",
+                "begin_at": "00:36:49,120",
+                "end_at": "00:36:50,120",
+                "video_url": "https://fangzhou-video.oss-cn-beijing.aliyuncs.com/oss:/extend/apps/split/apps/download/documentary/了不起的麦瑟尔夫人/了不起的麦瑟尔夫人-S2-04-1857.mp4",
+                "episode": 1736,
+                "subtile_sn": 1857,
+                "audio_url": "https://fangzhou-video.oss-cn-beijing.aliyuncs.com/oss:/extend/apps/split/apps/download/documentary/了不起的麦瑟尔夫人/了不起的麦瑟尔夫人-S2-04-1857.mp3"
+            }],  // 视频片段
+            "ending_duration": 1,  // 片尾市长
+            "remix_times": 3,  // 单词循环次数
+            "rerun_times": 2,  // 循环次数
+            "word_display_duration": 1.5,  // 单词释义时长
+        }],
         count: 0,
         page: 1,
         pageSize: 10,
