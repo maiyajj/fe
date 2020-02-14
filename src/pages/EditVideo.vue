@@ -35,51 +35,63 @@
     </el-row>
 
     <div style="font-weight: bold; margin-top: 50px; margin-bottom: 30px;">2、选择视频片段</div>
-    <div :key="sub.uid" style="margin-bottom: 40px;" v-for="(sub, index) in selectedVideo.data">
+    <div :key="sub.uid" style="margin-bottom: 40px;" v-for="(sub, index) in waitEditVideo.data">
       <el-row align="top" style="margin-bottom: 10px;" type="flex">
         <el-col :span="2">
-          <el-checkbox :value="true" @change="handleSelectedVideo(index)"/>
+          <el-checkbox :value="true"/>
         </el-col>
-        <el-col :span="7">
-          <video :src="sub.segments[0].video_url" controls height="180" width="320"/>
+        <el-col :span="6">
+          <video :src="sub.video_url" controls height="180" width="320"/>
         </el-col>
         <el-col :span="6">
           <div>
-            <el-input :value="sub.segments[0].subtile" autosize style="margin-bottom: 10px;" type="textarea"/>
-            <el-input :value="sub.segments[0].subtile" autosize style="margin-bottom: 10px;" type="textarea"/>
-            <el-input :value="'来源：' + sub.segments[0].episode_name" autosize type="textarea"/>
+            <el-input autosize style="margin-bottom: 10px;" type="textarea" v-model="video.subtitle[index][0]"/>
+            <el-input autosize style="margin-bottom: 10px;" type="textarea" v-model="video.subtitle[index][1]"/>
+            <el-input autosize type="textarea" v-model="video.episode[index]"/>
           </div>
         </el-col>
       </el-row>
     </div>
 
     <div style="font-weight: bold; margin-top: 50px; margin-bottom: 30px;">3、选择单词时间戳</div>
-    <div :key="sub.subtile_sn" style="margin-bottom: 40px;" v-for="(sub, index) in selectedVideo.data">
+    <div :key="sub.subtile_sn" style="margin-bottom: 40px;" v-for="(sub, index) in waitEditVideo.data">
       <el-row align="top" style="margin-bottom: 10px;" type="flex">
         <el-col :span="2">
-          <el-checkbox :value="true" @change="handleSelectedVideo(index)"/>
+          <el-checkbox :value="true"/>
         </el-col>
-        <el-col :span="7">
-          <video :src="sub.segments[0].video_url" controls height="180" width="320"/>
+        <el-col :span="6">
+          <video
+              :id="'video' + index"
+              :src="sub.video_url"
+              @play="handleVideoPlay(index)"
+              @timeupdate="videoOnTimeUpdate"
+              controls height="180"
+              width="320"/>
         </el-col>
         <el-col :span="6">
           <div style="margin-top: 30px;">
-            <el-row type="flex">
+            <el-row align="middle" type="flex">
               <el-col :span="3">
-                <el-button @click="handlePlay(index)" circle icon="el-icon-caret-right" size="mini"/>
-                <audio :id="'audio' + index" :src="sub.segments[0].audio_url" @timeupdate="onTimeUpdate"/>
+                <el-button @click="handleAudioPlay(index)" circle icon="el-icon-caret-right" size="mini"/>
+                <audio :id="'audio' + index" :src="sub.audio_url" @timeupdate="audioOnTimeUpdate"/>
               </el-col>
               <el-col :span="21">
-                <div style="white-space: pre-wrap">{{ sub.segments[0].subtile_sn }}</div>
-                <VueSlider :dotSize="0"
-                           :drag-on-click="true"
-                           :duration="0"
-                           :enableCross="false"
-                           :height="2"
-                           :tooltip="'always'"
-                           ref="slider"
-                           tooltipPlacement="bottom"
-                           v-model="vueSlider.value[index]">
+                <div style="white-space: pre-wrap; margin-bottom: 5px; min-height: 20px; ">
+                  {{ video.subtitle[index][1] }}
+                </div>
+                <VueSlider
+                    :dotSize="0"
+                    :drag-on-click="true"
+                    :duration="0"
+                    :enableCross="false"
+                    :height="2"
+                    :max="vueSlider.valueRange[index][1]"
+                    :min="vueSlider.valueRange[index][0]"
+                    :tooltip="'always'"
+                    @change="handleSliderChange(index)"
+                    ref="slider"
+                    tooltipPlacement="bottom"
+                    v-model="vueSlider.value[index]">
                   <template #tooltip>
                     <div style="margin-top: -17px">
                       <img alt="" src="../assets/sliderTooltip.png">
@@ -89,9 +101,9 @@
               </el-col>
             </el-row>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
-              <el-input v-model="vueSlider.value[index][0]"/>
+              <el-input @input="handleSliderInputChange(index)" v-model="vueSlider.valueDisplay[index][0]"/>
               <div style="margin-left: 30px; margin-right: 30px;">-</div>
-              <el-input v-model="vueSlider.value[index][1]"/>
+              <el-input @input="handleSliderInputChange(index)" v-model="vueSlider.valueDisplay[index][1]"/>
             </div>
           </div>
         </el-col>
@@ -102,48 +114,44 @@
       <el-col :span="3">
         <div>单词释义时长</div>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="5">
         <el-input
-            placeholder="请输入内容"
             style="margin-right: 30px;"
-            v-model="searchKeyWord"/>
+            v-model="wordOperation.wordDisplayDuration"/>
       </el-col>
     </el-row>
     <el-row align="middle" style="margin-bottom: 10px;" type="flex">
       <el-col :span="3">
         <div>片尾时长</div>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="5">
         <el-input
-            placeholder="请输入内容"
             style="margin-right: 30px;"
-            v-model="searchKeyWord"/>
+            v-model="wordOperation.endingDuration"/>
       </el-col>
     </el-row>
     <el-row align="middle" style="margin-bottom: 10px;" type="flex">
       <el-col :span="3">
         <div>视频循环次数</div>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="5">
         <el-input
-            placeholder="请输入内容"
             style="margin-right: 30px;"
-            v-model="searchKeyWord"/>
+            v-model="wordOperation.rerunTimes"/>
       </el-col>
     </el-row>
     <el-row align="middle" style="margin-bottom: 10px;" type="flex">
       <el-col :span="3">
         <div>单次循环次数</div>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="5">
         <el-input
-            placeholder="请输入内容"
             style="margin-right: 30px;"
-            v-model="searchKeyWord"/>
+            v-model="wordOperation.remixTimes"/>
       </el-col>
     </el-row>
     <el-row align="middle" style="margin-bottom: 10px; margin-top: 50px;" type="flex">
-      <el-col :span="11">
+      <el-col :span="8">
         <div style="display: flex; justify-content:space-between;">
           <el-button
               @click="handleLastStep"
@@ -173,12 +181,11 @@
         <div style="font-weight: bold; font-size: 25px;">预览视频</div>
       </span>
       <span style="display: flex; justify-content: center;">
-          <video :src="videoUrl" controls height="180" width="320"/>
+          <video :src="video.url" controls height="180" width="320"/>
       </span>
       <span slot="footer" style="display: flex; justify-content: center;">
         <el-button @click="dialogVisible = false" round type="primary">生成视频</el-button>
       </span>
-
     </el-dialog>
   </div>
 </template>
@@ -191,11 +198,11 @@ export default {
   name: "EditVideo",
   components: {VueSlider},
   props: {
-    selectedVideo: {
+    waitEditVideo: {
       type: Object,
       require: true,
     },
-    editVideo: {
+    pageJump: {
       type: Object,
       require: true,
     }
@@ -203,34 +210,61 @@ export default {
   data() {
     return {
       wordOperation: {
-        spelling: this.selectedVideo.data[0].word.spelling,
-        phoneticSymbol: this.selectedVideo.data[0].word.phonetic_symbol,
-        paraphrase: this.selectedVideo.data[0].word.paraphrase,
+        spelling: 'this.waitEditVideo.data[0].word.spelling',
+        phoneticSymbol: 'this.waitEditVideo.data[0].word.phonetic_symbol',
+        paraphrase: 'this.waitEditVideo.data[0].word.paraphrase',
+        wordDisplayDuration: 'this.waitEditVideo.data.wordDisplayDuration',
+        endingDuration: 'this.waitEditVideo.data.endingDuration',
+        rerunTimes: 'this.waitEditVideo.data.rerunTimes',
+        remixTimes: 'this.waitEditVideo.data.remixTimes',
+      },
+      video: {
+        url: 'https://fangzhou-video.oss-cn-beijing.aliyuncs.com/oss:/app/oss/split/app/oss/download/movie/教父2-1402.mp4',
+        subtitle: [],
+        episode: [],
+      },
+      vueSlider: {
+        value: [],
+        valueRange: [],
+        valueDisplay: []
       },
       dialogVisible: false,
-      videoUrl: 'https://fangzhou-video.oss-cn-beijing.aliyuncs.com/oss:/app/oss/split/app/oss/download/movie/教父2-1402.mp4',
-      vueSlider: {
-        value: [
-          [4, 30],
-          [10, 30],
-          [20, 30]
-        ]
-      },
+    }
+  },
+  created() {
+    // eslint-disable-next-line no-console
+    console.log(['created', this.waitEditVideo, this.pageJump]);
+    const count = this.waitEditVideo.data.length;
+    let i;
+    for (i = 0; i < count; i++) {
+      // 滑块相关
+      let begin_at = this.waitEditVideo.data[i].begin_at;
+      let end_at = this.waitEditVideo.data[i].end_at;
+      let min = this.formatTimerToInt(begin_at);
+      let max = this.formatTimerToInt(end_at);
+      this.vueSlider.valueRange.push([min, max]);
+      this.vueSlider.value.push([min, max]);
+      this.vueSlider.valueDisplay.push([begin_at, end_at]);
+      // 字幕相关
+      let [cn, en] = this.formatSubtitle(this.waitEditVideo.data[i].subtile);
+      this.video.subtitle.push([cn, en]);
+      // 来源
+      this.video.episode.push('来源：' + this.waitEditVideo.data[i].episode_name)
     }
   },
   methods: {
-    handleSelectedVideo(index) {
-      // eslint-disable-next-line no-console
-      console.log(index)
-    },
     handlePreview() {
       // eslint-disable-next-line no-console
-      console.log('3333')
-      // eslint-disable-next-line no-console
-      console.log(this.selectedVideo)
+      console.log(this.waitEditVideo.data);
     },
     handleLastStep() {
-      this.editVideo.show = true;
+      if (this.pageJump.beforePage === 'createVideo') {
+        this.pageJump.toPage = 'createVideo';
+        this.pageJump.beforePage = 'editVideo';
+      } else {
+        this.pageJump.toPage = 'wordTheatre';
+        this.pageJump.beforePage = 'editVideo';
+      }
     },
     handleClose(done) {
       this.$confirm('确认关闭？')
@@ -240,29 +274,72 @@ export default {
         .catch(() => {
         });
     },
-    handlePlay(index) {
+    handleSliderChange(index) {
+      const [begin_at, end_at] = this.vueSlider.value[index];
+      this.vueSlider.valueDisplay[index] = [this.formatTimerToStr(begin_at), this.formatTimerToStr(end_at)];
+    },
+    handleSliderInputChange(index) {
+      const min = this.vueSlider.valueRange[index][0];
+      const [begin_at, end_at] = this.vueSlider.valueDisplay[index];
+      const sliderIndex = [this.formatTimerToInt(begin_at) - min, this.formatTimerToInt(end_at) - min];
+      this.$refs.slider[index].setIndex(sliderIndex)
+    },
+    handleAudioPlay(index) {
       const audio = document.getElementById('audio' + index);
-      audio.currentTime = 0.5;
+      audio.currentTime = (this.vueSlider.value[index][0] - this.vueSlider.valueRange[index][0]) / 1000;
       audio.click();
       audio.play()
     },
-    onTimeUpdate(res) {
-      // eslint-disable-next-line no-console
-      console.log(res);
-      // eslint-disable-next-line no-console
-      console.log(res.target.id);
+    audioOnTimeUpdate(res) {
+      const index = res.target.id.replace(res.target.localName, '');
       const audio = document.getElementById(res.target.id);
-      if (res.target.currentTime >= 1.5) {
+      const end_time = (this.vueSlider.value[index][1] - this.vueSlider.valueRange[index][0]) / 1000;
+      if (res.target.currentTime >= end_time) {
         audio.pause();
       }
     },
-    formatSubtitle(data, index) {
-      const res = data.split('\n');
-      if (res[index] === undefined) {
-        return ''
+    handleVideoPlay(index) {
+      const video = document.getElementById('video' + index);
+      video.currentTime = (this.vueSlider.value[index][0] - this.vueSlider.valueRange[index][0]) / 1000;
+    },
+    videoOnTimeUpdate(res) {
+      const index = res.target.id.replace(res.target.localName, '');
+      const video = document.getElementById(res.target.id);
+      const end_time = (this.vueSlider.value[index][1] - this.vueSlider.valueRange[index][0]) / 1000;
+      if (res.target.currentTime >= end_time) {
+        video.pause();
       }
-    }
-  }
+    },
+    formatSubtitle(data) {
+      const tmp = data.split('\n');
+      if (tmp.length === 1) {
+        return [data, '']
+      } else {
+        const en = tmp.splice(tmp.length - 1, 1)[0];
+        const cn = tmp.join('\n');
+        return [cn, en]
+      }
+    },
+    formatTimerToInt(str) {
+      const tmp = str.split(',');
+      const ms = tmp.splice(tmp.length - 1, 1)[0];
+      const [h, m, s] = tmp[0].split(':');
+      const date = new Date(1970, 1, 1, h, m, s, ms);
+      return date.getTime();
+    },
+    formatTimerToStr(int) {
+      const date = new Date();
+      date.setTime(int);
+      const _h = String(date.getHours());
+      const h = (_h.length === 1) ? '0' + _h : _h;
+      const _m = String(date.getMinutes());
+      const m = (_m.length === 1) ? '0' + _m : _m;
+      const _s = String(date.getSeconds());
+      const s = (_s.length === 1) ? '0' + _s : _s;
+      const ms = String(date.getMilliseconds());
+      return `${h}:${m}:${s},${ms}`;
+    },
+  },
 }
 </script>
 

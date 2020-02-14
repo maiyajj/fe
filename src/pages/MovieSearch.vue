@@ -186,8 +186,8 @@ export default {
       // 前端传入url，后端下载完成后再返回文件数据流，接口时间较长。
       this.$api.downloadFiles(param)
         .then(({data}) => {
-          const urlList = urls.split("/");
-          const fileName = urlList[urlList.length - 1];
+          let urlList = urls.split("/");
+          let fileName = urlList[urlList.length - 1];
           fileDownload(data, fileName)
         })
         .catch(() => {
@@ -210,11 +210,11 @@ export default {
       this.$api.getVideo(params)
         .then(({data}) => {
           this.searchResult = data.results;
-          // 等数据加载了再更新顺序
-          this.page = val;
         })
         .finally(() => {
           loading.close();
+          // 等数据加载了再更新顺序
+          this.page = val;
           window.scrollTo(0, 0);
         })
     },
